@@ -15,6 +15,7 @@ class Result:
     def __init__(self, progName,incorrect,output_dir='/output'):
         self.progName = progName
         self.incorrect_path = incorrect
+        self.output_dir =output_dir
         self.numPPA = None
         self.ppa_before, self.ppa_after = None, None
 

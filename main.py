@@ -21,7 +21,7 @@ def repair(args):
     codeText_c = open(path_to_ref).read()
     codeText_i = open(path_to_inc).read()
     test_cases = FetchData.read_testCases(path_to_tests)
-    res = Result.Result(progName='example',incorrect=path_to_inc,output_dir=args.output_dir)
+    res = Result.Result(progName='example',incorrect=path_to_inc,output_dir=args.output)
     verifixRepair.repair(res, codeText_c, codeText_i, test_cases, progName='example', debug=True)
 
 def reproduce(args):

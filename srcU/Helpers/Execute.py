@@ -13,13 +13,13 @@ def compile_prog(codeText, fname='temp', debug=False, timeout=CF.timeout_compile
     open(fname_c, 'w').write(codeText)
 
     # Run Clang
-    cmd_list = ['clang', fname_c] + CF.ClangArgs + ['-o', fname_out]
+    cmd_list = ['clang', '-O0', '-lm', fname_c, '-o', fname_out]
     success, outs = H.subprocess_run(cmd_list, 
-        blame_str='Compilation', timeout=timeout, debug=debug, raiseExp=raiseExp)
+                                     blame_str='Compilation', timeout=timeout, debug=debug, raiseExp=raiseExp)
 
     # Delete file
     H.del_file(fname_c)
-    
+
     return success
 
 #endregion
@@ -35,7 +35,7 @@ def execute_prog(codeText, test_cases, fname='temp', debug=False, timeout=CF.tim
         for test_input, test_output in test_cases:
 
             success, outs = H.subprocess_run([fname_out], prog_input=test_input, 
-                blame_str='Execute', timeout=timeout, debug=debug, raiseExp=raiseExp)            
+                                             blame_str='Execute', timeout=timeout, debug=debug, raiseExp=raiseExp)            
             flag = success and str(test_output).strip() == outs.strip() # Run was successful and output matches gold standard            
             flag_execute = flag_execute and flag
 
@@ -48,7 +48,7 @@ def execute_prog(codeText, test_cases, fname='temp', debug=False, timeout=CF.tim
     # Delete file
     H.del_file(fname_c)
     H.del_file(fname_out)
-            
+
     return flag_compile and flag_execute
 
 #endregion

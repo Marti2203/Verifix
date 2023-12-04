@@ -31,5 +31,5 @@ if not os.path.exists(path_tmp): os.makedirs(path_tmp)
 
 # --------- Clang Path ------------#
 Clang_Include = '/usr/bin/../lib/clang/6.0/include/'
-ClangArgs = ['-static', '-lm', '-Wall', '-funsigned-char', '-Wno-unused-result', '-O', '-Wextra', '-std=c99', "-I"+Clang_Include]
+ClangArgs = ['-static', '-Wall', '-lm'  , '-funsigned-char', '-Wno-unused-result', '-O', '-Wextra']
 

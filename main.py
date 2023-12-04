@@ -21,7 +21,7 @@ def repair(args):
     codeText_c = open(path_to_ref).read()
     codeText_i = open(path_to_inc).read()
     test_cases = FetchData.read_testCases(path_to_tests)
-    res = Result.Result(progName='example')
+    res = Result.Result(progName='example',incorrect=path_to_inc,output_dir=args.output_dir)
     verifixRepair.repair(res, codeText_c, codeText_i, test_cases, progName='example', debug=True)
 
 def reproduce(args):
@@ -63,6 +63,7 @@ if __name__ == '__main__':
         parser.add_argument('-pi', type=str, help='path to incorrect solution')
         parser.add_argument('-tc', type=str, help='path to test cases')
         parser.add_argument('-tool', type=str, help='which tool to reproduce clara/verifix')
+        parser.add_argument('-output', type=str, help='output directory', default='/output')
         parser.add_argument('-debug', type=str2bool, default=False, help='enable debug mode? true/false, default is false')
         parser.add_argument('-parallel', type=int, default=1, help='number of programs to repair at one time, default is 1')
         args = parser.parse_args()

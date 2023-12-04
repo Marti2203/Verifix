@@ -8,11 +8,13 @@ from srcU.Helpers import ConfigFile as CF, Helper as H, Execute
 from srcU.Verifix.CFG import CFG, Concretize, claraAST
 from srcU.Verifix.Verify import Verification
 import os
+import tempfile
 
 #region: Result class
 class Result:
-    def __init__(self, progName):
+    def __init__(self, progName,incorrect,output_dir='/output'):
         self.progName = progName
+        self.incorrect_path = incorrect
         self.numPPA = None
         self.ppa_before, self.ppa_after = None, None
 
@@ -70,6 +72,18 @@ class Result:
         if debug:
             print(self.code_repair)
 
+            try:
+                repaired_code = self.code_repair
+                with tempfile.NamedTemporaryFile(mode="w", delete=False) as f:
+                    f.write(repaired_code)
+                    f.flush()
+                    #print(f"diff {f.name} {os.path.join(data_dir_path,ques_name,file_name)}")
+                    os.system(
+                        f"git diff {self.incorrect_path} {f.name} > {os.path.join(self.output_dir,os.path.basename(self.incorrect_path)+'_1.diff')}"
+                    )
+            except Exception as e:
+                print(e)
+
         self.isTest = Execute.execute_prog(self.code_repair, test_cases, fname=self.progName, debug=debug)
         if self.progName != '271569':
             self.relative_patch_size = claraAST.tree_edit_dist(self.ppa_before.cfgI.prog, self.ppa_after.cfgI.prog) / claraAST.patch_size(self.ppa_before.cfgI.prog)
@@ -80,7 +94,7 @@ class Result:
         self.timeTaken = round(self.endTime - self.startTime, 2)
 #endregion
 
-
+#region: Write results
 def write_results(df_codes_all:pd.DataFrame, results:List[Result], debug=False):
 
     labIDs = df_codes_all['labName'].unique()

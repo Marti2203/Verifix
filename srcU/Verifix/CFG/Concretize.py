@@ -227,7 +227,8 @@ def concretize_expr_str(expr:model.Expr, var:str, ignoreSpl, flag_addEOL=True, f
 
     if isinstance(expr, model.Op) and 'Array' in expr.name:
             blockStr = expr_str.exprStr
-
+    elif expr_str.flag_noOp:
+        blockStr = ''
      # if special case (either caller or callee don't want to assign), print the expr as it is (no assignment)
     elif expr_str.flag_noAssign or var == '_' or flag_noAssign:
         blockStr = '{}'.format(expr_str)
